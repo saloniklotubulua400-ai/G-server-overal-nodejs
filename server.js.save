@@ -1,0 +1,111 @@
+require("dotenv").config();
+
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+
+const PORT = process.env.PORT || 5000;
+
+// ==========================================
+// GLOBAL MIDDLEWARE
+// ==========================================
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ==========================================
+// API INFORMATION
+// ==========================================
+
+app.get("/", (req, res) => {
+    res.json({
+        success: true,
+        application: "Ellites Digital Services",
+        message: "Welcome to Ellites Digital Services API",
+        version: "1.0.0",
+        status: "online"
+    });
+});
+
+// ==========================================
+// API V1 HEALTH CHECK
+// ==========================================
+
+app.get("/api/v1/health", (req, res) => {
+    res.json({
+        success: true,
+        application: "Ellites Digital Services",
+        apiVersion: "v1",
+        status: "healthy",
+        database: "not connected",
+        timestamp: new Date().toISOString()
+    });
+});
+
+// ==========================================
+// API V1 INFORMATION
+// ==========================================
+
+app.get("/api/v1", (req, res) => {
+    res.json({
+        success: true,
+        message: "Ellites Digital Services API v1",
+        endpoints: {
+            health: "/api/v1/health",
+            auth: "/api/v1/auth",
+            users: "/api/v1/users",
+            products: "/api/v1/products",
+            orders: "/api/v1/orders",
+            transactions: "/api/v1/transactions",
+            payments: "/api/v1/payments",
+            admin: "/api/v1/admin"
+        }
+    });
+});
+
+// ==========================================
+// 404 HANDLER
+// ==========================================
+
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: "Route not found",
+        path: req.originalUrl
+    });
+});
+
+// ==========================================
+// GLOBAL ERROR HANDLER
+// ==========================================
+
+app.use((err, req, res, next) => {
+    console.error("[ERROR]", err);
+
+    res.status(err.statusCode || 500).json({
+        success: false,
+        message: err.message || "Internal server error"
+    });
+});
+
+// ==========================================
+// START SERVER
+// ==========================================
+
+app.listen(PORT, () => {
+    console.log("");
+    console.log("==========================================");
+    console.log("       ELLITES DIGITAL SERVICES");
+    console.log("==========================================");
+    console.log(`Server:      http://localhost:${PORT}`);
+    console.log(`API:         http://localhost:${PORT}/api/v1`);
+    console.log(`Health:      http://localhost:${PORT}/api/v1/health`);
+    console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+    console.log("Database:    Not connected");
+    console.log("Status:      ONLINE");
+    console.log("==========================================");
+    console.log("");
+});
+
