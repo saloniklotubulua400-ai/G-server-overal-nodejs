@@ -1,23 +1,20 @@
 // ==========================================
-// ELLITES DIGITAL SERVICES
 // FIREBASE CONFIGURATION
 // ==========================================
 
-require("dotenv").config();
-
 const admin = require("firebase-admin");
 
-// ==========================================
-// ENVIRONMENT VARIABLES
-// ==========================================
-
-const FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID;
-const FIREBASE_CLIENT_EMAIL = process.env.FIREBASE_CLIENT_EMAIL;
-const FIREBASE_PRIVATE_KEY = process.env.FIREBASE_PRIVATE_KEY;
+require("dotenv").config();
 
 // ==========================================
-// VALIDATE CONFIGURATION
+// CHECK FIREBASE ENVIRONMENT VARIABLES
 // ==========================================
+
+const {
+    FIREBASE_PROJECT_ID,
+    FIREBASE_CLIENT_EMAIL,
+    FIREBASE_PRIVATE_KEY
+} = process.env;
 
 if (
     !FIREBASE_PROJECT_ID ||
