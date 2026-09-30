@@ -1,14 +1,5 @@
-// ==========================================
-// FIREBASE CONFIGURATION
-// ==========================================
-
 const admin = require("firebase-admin");
-
 require("dotenv").config();
-
-// ==========================================
-// CHECK FIREBASE ENVIRONMENT VARIABLES
-// ==========================================
 
 const {
     FIREBASE_PROJECT_ID,
@@ -22,13 +13,9 @@ if (
     !FIREBASE_PRIVATE_KEY
 ) {
     throw new Error(
-        "Firebase configuration is incomplete. Check FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL and FIREBASE_PRIVATE_KEY in .env"
+        "Firebase configuration is incomplete. Check FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL and FIREBASE_PRIVATE_KEY."
     );
 }
-
-// ==========================================
-// INITIALIZE FIREBASE
-// ==========================================
 
 if (!admin.apps.length) {
     admin.initializeApp({
@@ -39,10 +26,6 @@ if (!admin.apps.length) {
         })
     });
 }
-
-// ==========================================
-// FIRESTORE
-// ==========================================
 
 const db = admin.firestore();
 
