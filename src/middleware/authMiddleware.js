@@ -20,14 +20,21 @@ const authenticate = (req, res, next) => {
       });
     }
 
-    const token = parts[1];
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is not set");
+      return res.status(500).json({
+        success: false,
+        message: "Server configuration error",
+      });
+    }
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET
-    );
+    const decoded = jwt.verify(parts[1], process.env.JWT_SECRET);
 
-    req.user = decoded;
+    // Make sure req.user.uid always exists (payment code reads it)
+    req.user = {
+      ...decoded,
+      uid: decoded.uid || decoded.id || decoded.userId,
+    };
 
     next();
   } catch (error) {
@@ -38,4 +45,9 @@ const authenticate = (req, res, next) => {
   }
 };
 
+// Works with: const protect = require(...)
+//             const { protect } = require(...)
+//             const { authenticate } = require(...)
 module.exports = authenticate;
+module.exports.authenticate = authenticate;
+module.exports.protect = authenticate;
